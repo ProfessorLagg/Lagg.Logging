@@ -8,7 +8,7 @@ namespace Lagg.Logging {
 				#region Init
 				private static bool InitRun = false;
 				private static void Init() {
-						if (!LaggLogger.InitRun) { return; }
+						if (LaggLogger.InitRun) { return; }
 						LaggLogger.Info($"Logging Started for: {Process.GetCurrentProcess().ProcessName}");
 						AppDomain.CurrentDomain.ProcessExit += (sender, e) => {
 								LaggLogger.Info($"Logging Stopped for: {Process.GetCurrentProcess().ProcessName}");
@@ -95,6 +95,7 @@ namespace Lagg.Logging {
 
 
 				public static void Log(LogLevel level, string message) {
+						Init();
 						LogLine line = new(level, message);
 						TryWriteToFile(ref line);
 						TryWriteToConsole(ref line);
